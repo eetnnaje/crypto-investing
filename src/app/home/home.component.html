@@ -1,9 +1,149 @@
-<form>
-  <dl>
-    <dt>BTC</dt>
-    <dd>
-      <div>{{ getPrice("BTCEUR")?.price | currency: "EUR" }}</div>
-      <div>{{ getPrice("BTCBUSD")?.price | currency: "USD" }}</div>
-    </dd>
-  </dl>
-</form>
+<dl>
+  <dt>Investment</dt>
+  <dd>
+    &euro;<input
+      #iInv
+      (input)="handleInvestment(+iInv.value)"
+      type="number"
+      step="0.01"
+      [defaultValue]="0"
+    />
+    &times;
+    <input
+      #iInvMultiplier
+      (input)="handleInvestment(+iInv.value)"
+      type="number"
+      [defaultValue]="1"
+    />
+    <div>
+      ({{
+        this.investment * getPrice("EURBUSD") * +iInvMultiplier.value
+          | currency: "USD"
+      }})
+    </div>
+  </dd>
+  <dt>Extras</dt>
+  <dd>
+    &euro;<input
+      #iExtras
+      (input)="handleExtras(+iExtras.value)"
+      type="number"
+      step="0.01"
+      [defaultValue]="0"
+    />
+    &times;
+    <input
+      #iExtrasMultiplier
+      (input)="handleExtras(+iExtras.value)"
+      type="number"
+      [defaultValue]="1"
+    />
+    <div>
+      ({{
+        this.extras * getPrice("EURBUSD") * +iExtrasMultiplier.value
+          | currency: "USD"
+      }})
+    </div>
+  </dd>
+  <dt>BUSD</dt>
+  <dd>
+    <input
+      #iBusd
+      (input)="handleStableCoinValue('busd', +iBusd.value)"
+      type="number"
+      step="0.01"
+      [defaultValue]="0"
+    />
+    &times;
+    <input
+      #iBusdMultiplier
+      (input)="handleStableCoinValue('busd', +iBusd.value)"
+      type="number"
+      [defaultValue]="1"
+    />
+    <div>
+      ({{
+        this.token["busd"]["value"] * +iBusdMultiplier.value | currency: "USD"
+      }})
+    </div>
+  </dd>
+  <dt>AXS</dt>
+  <dd>
+    <input
+      #iAxs
+      (input)="handleTokenValue('axs', +iAxs.value)"
+      type="number"
+      step="0.01"
+      [defaultValue]="0"
+    />
+    &times;
+    <input
+      #iAxsMultiplier
+      (input)="handleTokenValue('axs', +iAxs.value)"
+      type="number"
+      [defaultValue]="1"
+    />
+    <div>
+      ({{
+        this.token["axs"]["value"] * +iAxsMultiplier.value | currency: "USD"
+      }})
+    </div>
+  </dd>
+  <dt>ETH</dt>
+  <dd>
+    <input
+      #iEth
+      (input)="handleTokenValue('eth', +iEth.value)"
+      type="number"
+      step="0.01"
+      [defaultValue]="0"
+    />
+    &times;
+    <input
+      #iEthMultiplier
+      (input)="handleTokenValue('eth', +iEth.value)"
+      type="number"
+      [defaultValue]="1"
+    />
+    <div>
+      ({{
+        this.token["eth"]["value"] * +iEthMultiplier.value | currency: "USD"
+      }})
+    </div>
+  </dd>
+  <dt>Total Fiat</dt>
+  <dd>
+    {{
+      investment * getPrice("EURBUSD") * +iInvMultiplier.value +
+        extras * getPrice("EURBUSD") * +iExtrasMultiplier.value +
+        token["busd"]["value"] * +iBusdMultiplier.value | currency: "USD"
+    }}
+  </dd>
+  <dt>Total Crypto</dt>
+  <dd>
+    {{
+      token["axs"]["value"] * +iAxsMultiplier.value +
+        token["eth"]["value"] * +iEthMultiplier.value | currency: "USD"
+    }}
+  </dd>
+  <dt>Gain / Loss</dt>
+  <dd
+    [ngClass]="
+      token['axs']['value'] * +iAxsMultiplier.value +
+        token['eth']['value'] * +iEthMultiplier.value >
+      investment * getPrice('EURBUSD') * +iInvMultiplier.value +
+        extras * getPrice('EURBUSD') * +iExtrasMultiplier.value +
+        token['busd']['value'] * +iBusdMultiplier.value
+        ? 'gain'
+        : 'loss'
+    "
+  >
+    {{
+      token["axs"]["value"] * +iAxsMultiplier.value +
+        token["eth"]["value"] * +iEthMultiplier.value -
+        investment * getPrice("EURBUSD") * +iInvMultiplier.value +
+        extras * getPrice("EURBUSD") * +iExtrasMultiplier.value +
+        token["busd"]["value"] * +iBusdMultiplier.value | currency: "USD"
+    }}
+  </dd>
+</dl>
