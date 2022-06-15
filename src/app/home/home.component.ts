@@ -1,12 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  BehaviorSubject,
-  interval,
-  map,
-  Observable,
-  of,
-  switchMap,
-} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { PriceService } from '../services/price.service';
 import { Price } from '../types/price.type';
 
@@ -16,16 +9,24 @@ import { Price } from '../types/price.type';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public prices$: Observable<Price[]> = new BehaviorSubject([]);
+  public prices: Price[] = [];
 
   constructor(private readonly _priceService: PriceService) {}
 
   ngOnInit(): void {
-    this.prices$ = this._priceService.getPrices();
+    this._priceService.getPrices().subscribe((prices) => {
+      this.prices = prices;
+    });
 
     const minute = 60 * 1_000;
     setInterval(() => {
-      this.prices$ = this._priceService.getPrices();
+      this._priceService.getPrices().subscribe((prices) => {
+        this.prices = prices;
+      });
     }, minute);
+  }
+
+  getPrice(symbol: string): Price | undefined {
+    return this.prices.find(({ symbol: s }) => symbol === s);
   }
 }

@@ -1,4 +1,9 @@
-<h1>Prices</h1>
-<ul *ngFor="let price of prices$ | async">
-  <li>{{ price.symbol }}: {{ price.price }}</li>
-</ul>
+<form>
+  <dl>
+    <dt>BTC</dt>
+    <dd>
+      <div>{{ getPrice("BTCEUR")?.price | currency: "EUR" }}</div>
+      <div>{{ getPrice("BTCBUSD")?.price | currency: "USD" }}</div>
+    </dd>
+  </dl>
+</form>
