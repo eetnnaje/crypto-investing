@@ -1,0 +1,7 @@
+@API_URL = https://api.binance.com/api/v3
+
+### Pair Price (All)
+GET {{ API_URL }}/ticker/price
+
+### Pair Price (One)
+GET {{ API_URL }}/ticker/price?symbol=BTCBUSD
