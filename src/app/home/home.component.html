@@ -1,3 +1,5 @@
+<h1>Crypto Investing</h1>
+
 <h2>Fiat</h2>
 <ul>
   <li>
@@ -17,7 +19,6 @@
       (input)="handleChange()"
       [defaultValue]="1"
     />
-
     <span>
       {{
         euro2dollar(+fiatMonthly.value) * +multiplierMonth.value
@@ -62,5 +63,60 @@
     <strong> Total: </strong>
     <span>{{ totalFiat | currency: "USD" }} </span>
     <span>({{ dollar2euro(totalFiat) | currency: "EUR" }})</span>
+  </li>
+</ul>
+
+<h2>Crypto</h2>
+<ul>
+  <li>
+    <label for="crypto-axs"> AXS </label>
+    <input
+      #cryptoAxs
+      id="crypto-axs"
+      type="number"
+      (input)="handleChange()"
+      [defaultValue]="0"
+    />
+    <span>
+      {{ crypto2dollar("axsbusd", +cryptoAxs.value) | currency: "USD" }}
+    </span>
+    <span
+      >( {{ crypto2euro("axsbusd", +cryptoAxs.value) | currency: "EUR" }})
+    </span>
+  </li>
+  <li>
+    <label for="crypto-eth"> ETH </label>
+    <input
+      #cryptoEth
+      id="crypto-eth"
+      type="number"
+      (input)="handleChange()"
+      [defaultValue]="0"
+    />
+    <span> &times; </span>
+    <input
+      #multiplierEth
+      id="multiplier-eth"
+      type="number"
+      (input)="handleChange()"
+      [defaultValue]="1"
+    />
+    <span>
+      {{
+        crypto2dollar("ethbusd", +cryptoEth.value) * +multiplierEth.value
+          | currency: "USD"
+      }}
+    </span>
+    <span
+      >({{
+        crypto2euro("ethbusd", +cryptoEth.value) * +multiplierEth.value
+          | currency: "EUR"
+      }})</span
+    >
+  </li>
+  <li>
+    <strong> Total: </strong>
+    <span>{{ totalCrypto | currency: "USD" }} </span>
+    <span>({{ dollar2euro(totalCrypto) | currency: "EUR" }})</span>
   </li>
 </ul>

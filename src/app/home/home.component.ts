@@ -14,7 +14,12 @@ export class HomeComponent implements OnInit {
   @ViewChild('fiatAdvanced') fiatAdvanced!: ElementRef;
   @ViewChild('fiatBUSD') fiatBUSD!: ElementRef;
 
+  @ViewChild('cryptoEth') cryptoEth!: ElementRef;
+  @ViewChild('multiplierEth') multiplierEth!: ElementRef;
+  @ViewChild('cryptoAxs') cryptoAxs!: ElementRef;
+
   public totalFiat = 0;
+  public totalCrypto = 0;
   public prices: Price[] = [];
 
   constructor(private priceService: PriceService) {}
@@ -33,6 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   getPrice(symbol: string): number {
+    symbol = symbol.toLocaleUpperCase();
     const price = this.prices.find(({ symbol: s }) => symbol === s);
     if (price) return +price.price;
     return 0;
@@ -50,6 +56,17 @@ export class HomeComponent implements OnInit {
     return value / dollar;
   }
 
+  crypto2dollar(symbol: string, value: number): number {
+    const price = this.getPrice(symbol);
+    return value * price;
+  }
+
+  crypto2euro(symbol: string, value: number): number {
+    const price = this.getPrice(symbol);
+    const euro = this.getPrice('EURBUSD');
+    return (value * price) / euro;
+  }
+
   handleChange(): void {
     this.totalFiat = [
       +this.euro2dollar(
@@ -59,6 +76,15 @@ export class HomeComponent implements OnInit {
       +this.euro2dollar(this.fiatAdditional.nativeElement.value),
       +this.euro2dollar(this.fiatAdvanced.nativeElement.value),
       +this.dollar2euro(this.fiatBUSD.nativeElement.value),
+    ].reduce((prev, curr) => prev + curr, 0);
+
+    this.totalCrypto = [
+      this.crypto2dollar(
+        'ethbusd',
+        this.cryptoEth.nativeElement.value *
+          +this.multiplierEth.nativeElement.value
+      ),
+      this.crypto2dollar('axsbusd', this.cryptoAxs.nativeElement.value),
     ].reduce((prev, curr) => prev + curr, 0);
   }
 }
