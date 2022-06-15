@@ -120,3 +120,18 @@
     <span>({{ dollar2euro(totalCrypto) | currency: "EUR" }})</span>
   </li>
 </ul>
+
+<h2>ROI</h2>
+<ul>
+  <li *ngIf="!gain || !loss">N/A</li>
+  <li *ngIf="gain > loss" class="gain">
+    <strong> Gain: </strong>
+    <span>+{{ gain | currency: "USD" }}</span>
+    <span> ({{ dollar2euro(gain) | currency: "EUR" }}) </span>
+  </li>
+  <li *ngIf="loss > gain" class="loss">
+    <strong> Loss: </strong>
+    <span>-{{ loss | currency: "USD" }}</span>
+    <span> ({{ dollar2euro(loss) | currency: "EUR" }}) </span>
+  </li>
+</ul>

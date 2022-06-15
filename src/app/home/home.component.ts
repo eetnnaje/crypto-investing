@@ -18,6 +18,9 @@ export class HomeComponent implements OnInit {
   @ViewChild('multiplierEth') multiplierEth!: ElementRef;
   @ViewChild('cryptoAxs') cryptoAxs!: ElementRef;
 
+  public gain: number = 0;
+  public loss: number = 0;
+
   public totalFiat = 0;
   public totalCrypto = 0;
   public prices: Price[] = [];
@@ -86,5 +89,8 @@ export class HomeComponent implements OnInit {
       ),
       this.crypto2dollar('axsbusd', this.cryptoAxs.nativeElement.value),
     ].reduce((prev, curr) => prev + curr, 0);
+
+    this.gain = this.totalCrypto - this.totalFiat;
+    this.loss = this.totalFiat - this.totalCrypto;
   }
 }
