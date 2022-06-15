@@ -1,16 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PriceService } from '../services/price.service';
 import { Price } from '../types/price.type';
-
-export type Token = {
-  [key: string]: number;
-};
-
-export type Tokens = {
-  [key: string]: Token;
-};
-
-const TOKEN = { price: 0, amount: 0, value: 0 };
 
 @Component({
   selector: 'app-home',
@@ -18,14 +8,13 @@ const TOKEN = { price: 0, amount: 0, value: 0 };
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public investment: number = 0;
-  public extras: number = 0;
-  public token: Tokens = {
-    busd: TOKEN,
-    btc: TOKEN,
-    eth: TOKEN,
-    axs: TOKEN,
-  };
+  @ViewChild('fiatMonthly') fiatMonthly!: ElementRef;
+  @ViewChild('multiplierMonth') multiplierMonth!: ElementRef;
+  @ViewChild('fiatAdditional') fiatAdditional!: ElementRef;
+  @ViewChild('fiatAdvanced') fiatAdvanced!: ElementRef;
+  @ViewChild('fiatBUSD') fiatBUSD!: ElementRef;
+
+  public totalFiat = 0;
   public prices: Price[] = [];
 
   constructor(private priceService: PriceService) {}
@@ -43,31 +32,33 @@ export class HomeComponent implements OnInit {
     }, minute);
   }
 
-  handleInvestment(amount: number): void {
-    this.investment = amount;
-  }
-
-  handleExtras(amount: number): void {
-    this.extras = amount;
-  }
-
   getPrice(symbol: string): number {
     const price = this.prices.find(({ symbol: s }) => symbol === s);
     if (price) return +price.price;
     return 0;
   }
 
-  handleTokenValue(token: string, amount: number): void {
-    const symbol = [token.toUpperCase(), 'BUSD'].join('');
-    const price = this.getPrice(symbol);
-    const value = amount * price;
-    this.token[token] = { amount, price, value };
+  euro2dollar(value: number): number {
+    const symbol = 'EURBUSD';
+    const dollar = this.getPrice(symbol);
+    return value * dollar;
   }
 
-  handleStableCoinValue(stableCoin: string, amount: number): void {
-    const symbol = stableCoin.toLowerCase();
-    const price = amount;
-    const value = amount;
-    this.token[symbol] = { amount, price, value };
+  dollar2euro(value: number): number {
+    const symbol = 'EURBUSD';
+    const dollar = this.getPrice(symbol);
+    return value / dollar;
+  }
+
+  handleChange(): void {
+    this.totalFiat = [
+      +this.euro2dollar(
+        this.fiatMonthly.nativeElement.value *
+          +this.multiplierMonth.nativeElement.value
+      ),
+      +this.euro2dollar(this.fiatAdditional.nativeElement.value),
+      +this.euro2dollar(this.fiatAdvanced.nativeElement.value),
+      +this.dollar2euro(this.fiatBUSD.nativeElement.value),
+    ].reduce((prev, curr) => prev + curr, 0);
   }
 }
