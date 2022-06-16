@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { PriceService } from '../services/price.service';
 import { Price } from '../types/price.type';
 
@@ -7,7 +13,7 @@ import { Price } from '../types/price.type';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('fiatMonthly') fiatMonthly!: ElementRef;
   @ViewChild('multiplierMonth') multiplierMonth!: ElementRef;
   @ViewChild('fiatAdditional') fiatAdditional!: ElementRef;
@@ -33,11 +39,27 @@ export class HomeComponent implements OnInit {
     });
 
     const minute = 60 * 1_000;
-    setInterval(() => {
-      this.priceService.getPrices().subscribe((prices) => {
-        this.prices = prices;
-      });
-    }, minute);
+    setInterval(
+      () =>
+        this.priceService
+          .getPrices()
+          .subscribe((prices) => (this.prices = prices)),
+      minute
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.fiatMonthly.nativeElement.value = (3375.94 + 480.0) / 5;
+    this.multiplierMonth.nativeElement.value = 5;
+    this.fiatAdditional.nativeElement.value = 342.67;
+    this.fiatAdvanced.nativeElement.value = 266.0;
+    this.fiatBUSD.nativeElement.value = 316.4;
+    this.cryptoEth.nativeElement.value = 1.217;
+    this.multiplierEth.nativeElement.value = 2;
+    this.cryptoAxs.nativeElement.value = 0;
+
+    const minute = 1 * 1_000;
+    setTimeout(() => this.handleChange(), minute);
   }
 
   getPrice(symbol: string): number {
