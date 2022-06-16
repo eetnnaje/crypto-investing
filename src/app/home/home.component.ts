@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('fiatAdditional') fiatAdditional!: ElementRef;
   @ViewChild('fiatAdvanced') fiatAdvanced!: ElementRef;
   @ViewChild('fiatBUSD') fiatBUSD!: ElementRef;
+  @ViewChild('exchangeRamp') exchangeRamp!: ElementRef;
 
   @ViewChild('cryptoEth') cryptoEth!: ElementRef;
   @ViewChild('multiplierEth') multiplierEth!: ElementRef;
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public loss: number = 0;
 
   public totalFiat = 0;
+  public overspent = 0;
   public totalCrypto = 0;
   public prices: Price[] = [];
 
@@ -54,6 +56,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fiatAdditional.nativeElement.value = 342.67;
     this.fiatAdvanced.nativeElement.value = 266.0;
     this.fiatBUSD.nativeElement.value = 316.4;
+    this.exchangeRamp.nativeElement.value = 5297.18;
     this.cryptoEth.nativeElement.value = 1.217;
     this.multiplierEth.nativeElement.value = 2;
     this.cryptoAxs.nativeElement.value = 0;
@@ -102,6 +105,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       +this.euro2dollar(this.fiatAdvanced.nativeElement.value),
       +this.dollar2euro(this.fiatBUSD.nativeElement.value),
     ].reduce((prev, curr) => prev + curr, 0);
+
+    this.overspent =
+      this.euro2dollar(+this.exchangeRamp.nativeElement.value) - this.totalFiat;
+    this.totalFiat = this.totalFiat + this.overspent;
 
     this.totalCrypto = [
       this.crypto2dollar(

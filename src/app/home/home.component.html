@@ -60,6 +60,22 @@
     <span> {{ dollar2euro(+fiatBUSD.value) | currency: "EUR" }} </span>
   </li>
   <li>
+    <label for="exchange-ramp"> Ramp &euro; </label>
+    <input
+      #exchangeRamp
+      id="exchange-ramp"
+      type="number"
+      (input)="handleChange()"
+      [defaultValue]="0"
+    />
+    <span> {{ euro2dollar(+exchangeRamp.value) | currency: "USD" }} </span>
+  </li>
+  <li>
+    <strong> Overspent: </strong>
+    <span>{{ overspent | currency: "USD" }} </span>
+    <span>({{ euro2dollar(overspent) | currency: "EUR" }})</span>
+  </li>
+  <li>
     <strong> Total: </strong>
     <span>{{ totalFiat | currency: "USD" }} </span>
     <span>({{ dollar2euro(totalFiat) | currency: "EUR" }})</span>
