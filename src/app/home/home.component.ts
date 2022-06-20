@@ -57,7 +57,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fiatAdvanced.nativeElement.value = 266.0;
     this.fiatBUSD.nativeElement.value = 323.47;
     this.exchangeRamp.nativeElement.value = 5297.18;
-    this.cryptoEth.nativeElement.value = +(0.677 + 3.28 * 0.95).toFixed(2);
+    this.cryptoEth.nativeElement.value = +[
+      0.677, // eth
+      3.28 * 0.95, // ilv land
+    ]
+      .reduce((prev, curr) => prev + curr, 0)
+      .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
     this.cryptoAxs.nativeElement.value = 0;
 
