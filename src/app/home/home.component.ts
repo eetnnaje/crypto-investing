@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.multiplierMonth.nativeElement.value = 5;
     this.fiatAdditional.nativeElement.value = 342.67;
     this.fiatAdvanced.nativeElement.value = 266.0;
-    this.fiatBUSD.nativeElement.value = 1094.18;
+    this.fiatBUSD.nativeElement.value = 655.86;
     this.exchangeRamp.nativeElement.value = 5297.18;
     this.cryptoEth.nativeElement.value = +[
       3.28 * 0.95, // ilv land
@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
-    this.cryptoAxs.nativeElement.value = 0;
+    this.cryptoAxs.nativeElement.value = 78.15;
 
     const minute = 1 * 1_000;
     setTimeout(() => this.handleChange(), minute);
