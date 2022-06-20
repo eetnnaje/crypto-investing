@@ -55,10 +55,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.multiplierMonth.nativeElement.value = 5;
     this.fiatAdditional.nativeElement.value = 342.67;
     this.fiatAdvanced.nativeElement.value = 266.0;
-    this.fiatBUSD.nativeElement.value = 316.4;
+    this.fiatBUSD.nativeElement.value = 323.47;
     this.exchangeRamp.nativeElement.value = 5297.18;
-    this.cryptoEth.nativeElement.value = 1.217;
-    this.multiplierEth.nativeElement.value = 2;
+    this.cryptoEth.nativeElement.value = +(0.677 + 3.28 * 0.95).toFixed(2);
+    this.multiplierEth.nativeElement.value = 1;
     this.cryptoAxs.nativeElement.value = 0;
 
     const minute = 1 * 1_000;
