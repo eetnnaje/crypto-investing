@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
-    this.cryptoAxs.nativeElement.value = 0.3361;
+    this.cryptoAxs.nativeElement.value = +(0.3361).toFixed(2);
 
     const minute = 1 * 1_000;
     setTimeout(() => this.handleChange(), minute);
