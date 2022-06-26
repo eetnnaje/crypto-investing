@@ -83,8 +83,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.cryptoEth.nativeElement.value = +[
-      1.64 * 2 * 0.95, // ilv land
-      2.2 * 3 * 1.05, // ai land
+      +(1.64 * 2 * 1.05).toFixed(1), // ilv land
+      +(2.2 * 3 * 1.05).toFixed(1), // ai land
     ]
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
