@@ -51,19 +51,45 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.fiatMonthly.nativeElement.value = (3375.94 + 480.0) / 5;
-    this.multiplierMonth.nativeElement.value = 5;
-    this.fiatAdditional.nativeElement.value = 342.67;
-    this.fiatAdvanced.nativeElement.value = 266.0;
-    this.fiatBUSD.nativeElement.value = 655.86;
-    this.exchangeRamp.nativeElement.value = 5297.18;
+    this.fiatMonthly.nativeElement.value = (
+      ([3068.31, 3479.49, 3454.4, 3454.4, 3423.1, 3518.06].reduce(
+        (prev, curr) => prev + curr,
+        0
+      ) /
+        6) *
+        0.2 +
+      80
+    ).toFixed(2);
+    this.multiplierMonth.nativeElement.value = 6;
+    this.fiatAdditional.nativeElement.value = (
+      [1370.46, 342.9].reduce((prev, curr) => prev + curr, 0) * 0.2
+    ).toFixed(2);
+    this.fiatAdvanced.nativeElement.value = 0;
+    this.fiatBUSD.nativeElement.value = 0;
+    this.exchangeRamp.nativeElement.value = [
+      // Jan
+      37.34, 50.0, 100.0, 100.0, 100.0, 200.0, 50.0, 50.0, 517.36, 200.0, 80.0,
+      // Feb
+      70.0, 80.0, 100.0, 68.58, 200.0, 195.9, 200.0,
+      // Mar
+      100.0, 100.0, 200.0, 39.0, 82.0, 120.0, 200.0,
+      // Apr
+      80.0, 40.0, 50.0, 80.0, 201.0,
+      // May
+      345.0, 345.0, 531.0, 319.0, 166.0,
+      // Jun
+      50.0, 50.0, 783.0, 553.0,
+    ]
+      .reduce((prev, curr) => prev + curr, 0)
+      .toFixed(2);
     this.cryptoEth.nativeElement.value = +[
-      3.28 * 0.95, // ilv land
+      1.64 * 2 * 0.95, // ilv land
+      2.2 * 3 * 1.05, // ai land
     ]
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
-    this.cryptoAxs.nativeElement.value = 78.15;
+    this.cryptoAxs.nativeElement.value = 0;
 
     const minute = 1 * 1_000;
     setTimeout(() => this.handleChange(), minute);
