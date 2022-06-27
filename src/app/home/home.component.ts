@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { PriceService } from '../services/price.service';
-import { Price } from '../types/price.type';
+import { exchangeRate, Price } from '../types/price.type';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('cryptoEth') cryptoEth!: ElementRef;
   @ViewChild('multiplierEth') multiplierEth!: ElementRef;
   @ViewChild('cryptoAxs') cryptoAxs!: ElementRef;
+  @ViewChild('cryptoRon') cryptoRon!: ElementRef;
 
   public gain: number = 0;
   public loss: number = 0;
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public remainingFiat = 0;
   public totalCrypto = 0;
   public prices: Price[] = [];
+  public exchangeRate!: exchangeRate
 
   constructor(private priceService: PriceService) {}
 
@@ -77,7 +79,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // May
       345.0, 345.0, 531.0, 319.0, 166.0,
       // Jun
-      50.0, 50.0, 783.0, 553.0,
+      50.0, 50.0, 783.0, 553.0, 150.0,
     ]
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
@@ -88,7 +90,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
-    this.cryptoAxs.nativeElement.value = +(0.3361).toFixed(2);
+    this.cryptoAxs.nativeElement.value = +(0.0004).toFixed(2);
+    this.cryptoRon.nativeElement.value = +(14.871617).toFixed(2);
+
+    this.priceService.getExchangeRates().subscribe(rate => {
+      this.exchangeRate = rate;
+    });
 
     const minute = 1 * 1_000;
     setTimeout(() => this.handleChange(), minute);
@@ -114,6 +121,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   crypto2dollar(symbol: string, value: number): number {
+    const price = this.getPrice(symbol);
+    return value * price;
+  }
+
+  crypto2dollarExchange(symbol: string, value: number): number {
     const price = this.getPrice(symbol);
     return value * price;
   }
@@ -145,6 +157,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           +this.multiplierEth.nativeElement.value
       ),
       this.crypto2dollar('axsbusd', this.cryptoAxs.nativeElement.value),
+      this.cryptoRon.nativeElement.value * this.exchangeRate.data.exchangeRate.ron.usd,
     ].reduce((prev, curr) => prev + curr, 0);
 
     this.gain = this.totalCrypto - this.budget;

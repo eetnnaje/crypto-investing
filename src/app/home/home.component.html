@@ -85,6 +85,31 @@
 <h2>Crypto</h2>
 <ul>
   <li>
+    <label for="crypto-ron"> RON </label>
+    <input
+      #cryptoRon
+      id="crypto-ron"
+      type="number"
+      (input)="handleChange()"
+      [defaultValue]="0"
+    />
+    <span>
+      {{
+        +cryptoRon.value *
+          (this.exchangeRate?.data?.exchangeRate?.ron?.usd || 0)
+          | currency: "USD"
+      }}
+    </span>
+    <span>
+      ({{
+        dollar2euro(
+          +cryptoRon.value *
+            (this.exchangeRate?.data?.exchangeRate?.ron?.usd || 0)
+        ) | currency: "EUR"
+      }})
+    </span>
+  </li>
+  <li>
     <label for="crypto-axs"> AXS </label>
     <input
       #cryptoAxs
@@ -97,7 +122,7 @@
       {{ crypto2dollar("axsbusd", +cryptoAxs.value) | currency: "USD" }}
     </span>
     <span
-      >( {{ crypto2euro("axsbusd", +cryptoAxs.value) | currency: "EUR" }})
+      >({{ crypto2euro("axsbusd", +cryptoAxs.value) | currency: "EUR" }})
     </span>
   </li>
   <li>
