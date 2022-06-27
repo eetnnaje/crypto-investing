@@ -28,8 +28,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public gain: number = 0;
   public loss: number = 0;
 
-  public totalFiat = 0;
-  public overspent = 0;
+  public budget = 0;
+  public remainingFiat = 0;
   public totalCrypto = 0;
   public prices: Price[] = [];
 
@@ -52,13 +52,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.fiatMonthly.nativeElement.value = (
-      ([3068.31, 3479.49, 3454.4, 3454.4, 3423.1, 3518.06].reduce(
+      ([3068.31, 3479.49, 3454.4, 3454.4, 3423.1, 3518.06, 400 * 6].reduce(
         (prev, curr) => prev + curr,
         0
       ) /
         6) *
-        0.2 +
-      80
+      0.2
     ).toFixed(2);
     this.multiplierMonth.nativeElement.value = 6;
     this.fiatAdditional.nativeElement.value = (
@@ -83,8 +82,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
     this.cryptoEth.nativeElement.value = +[
-      +(1.64 * 2 * 1.05).toFixed(1), // ilv land
-      +(2.2 * 3 * 1.05).toFixed(1), // ai land
+      1.64, // ilv land
+      2.2, // ai land
     ]
       .reduce((prev, curr) => prev + curr, 0)
       .toFixed(2);
@@ -126,19 +125,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   handleChange(): void {
-    this.totalFiat = [
-      +this.euro2dollar(
-        this.fiatMonthly.nativeElement.value *
-          +this.multiplierMonth.nativeElement.value
-      ),
-      +this.euro2dollar(this.fiatAdditional.nativeElement.value),
-      +this.euro2dollar(this.fiatAdvanced.nativeElement.value),
-      +this.dollar2euro(this.fiatBUSD.nativeElement.value),
+    this.budget = [
+      +this.fiatMonthly.nativeElement.value *
+        +this.multiplierMonth.nativeElement.value,
+      +this.fiatAdditional.nativeElement.value,
     ].reduce((prev, curr) => prev + curr, 0);
-
-    this.overspent =
-      this.euro2dollar(+this.exchangeRamp.nativeElement.value) - this.totalFiat;
-    this.totalFiat = this.totalFiat + this.overspent;
+    this.remainingFiat =
+      [
+        this.budget,
+        +this.fiatAdvanced.nativeElement.value,
+        +this.dollar2euro(this.fiatBUSD.nativeElement.value),
+      ].reduce((prev, curr) => prev + curr, 0) -
+      +this.exchangeRamp.nativeElement.value;
 
     this.totalCrypto = [
       this.crypto2dollar(
@@ -149,7 +147,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.crypto2dollar('axsbusd', this.cryptoAxs.nativeElement.value),
     ].reduce((prev, curr) => prev + curr, 0);
 
-    this.gain = this.totalCrypto - this.totalFiat;
-    this.loss = this.totalFiat - this.totalCrypto;
+    this.gain = this.totalCrypto - this.budget;
+    this.loss = this.budget - this.totalCrypto;
   }
 }

@@ -71,14 +71,14 @@
     <span> {{ euro2dollar(+exchangeRamp.value) | currency: "USD" }} </span>
   </li>
   <li>
-    <strong> Overspent: </strong>
-    <span>{{ overspent | currency: "USD" }} </span>
-    <span>({{ euro2dollar(overspent) | currency: "EUR" }})</span>
+    <strong> Budget: </strong>
+    <span>{{ budget | currency: "EUR" }} </span>
+    <span>({{ euro2dollar(budget) | currency: "USD" }})</span>
   </li>
-  <li>
-    <strong> Total: </strong>
-    <span>{{ totalFiat | currency: "USD" }} </span>
-    <span>({{ dollar2euro(totalFiat) | currency: "EUR" }})</span>
+  <li [ngClass]="remainingFiat > 0 ? 'gain' : 'loss'">
+    <strong> Remaining: </strong>
+    <span>{{ remainingFiat | currency: "EUR" }} </span>
+    <span>({{ euro2dollar(remainingFiat) | currency: "USD" }})</span>
   </li>
 </ul>
 
