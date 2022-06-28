@@ -91,7 +91,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .toFixed(2);
     this.multiplierEth.nativeElement.value = 1;
     this.cryptoAxs.nativeElement.value = +(0.0004).toFixed(2);
-    this.cryptoRon.nativeElement.value = +(14.871617).toFixed(2);
+    this.cryptoRon.nativeElement.value = +(438.664977).toFixed(2);
 
     this.priceService.getExchangeRates().subscribe(rate => {
       this.exchangeRate = rate;
